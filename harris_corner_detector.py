@@ -159,8 +159,18 @@ def create_grad_x_and_grad_y(
     """INSERT YOUR CODE HERE.
     REPLACE THE VALUES FOR Ix AND Iy WITH THE GRADIENTS YOU COMPUTED.
     """
-    Ix = np.random.uniform(size=(height, width))
-    Iy = np.random.uniform(size=(height, width))
+    if nof_color_channels == 3:
+       input_image = cv2.cvtColor(input_image, cv2.COLOR_RGB2GRAY) 
+    added_x = np.zeros(input_image.shape[1]-1)
+    added_y = np.zeros(input_image.shape[0]-1)
+    offset_x = np.concatenate((added_x,input_image[:,:-1]),axis= 0,casting="same_kind")
+    #offset_y = np.column_stack((added_y,input_image[:-1,:]))
+
+    offset_x = np.vstack((added_x,input_image[:,:-1]))
+    Ix = input_image - offset_x
+    Iy = input_image - offset_y
+    #Ix = np.random.uniform(size=(height, width))
+    #Iy = np.random.uniform(size=(height, width))
     return Ix, Iy
 
 
@@ -306,7 +316,7 @@ def create_corner_plots(black_and_white_image: np.ndarray,
 
 
 def main(to_save: bool = False) -> None:
-    test_tiles_functions(to_save)
+    #test_tiles_functions(to_save)
     # Read checkerboard image as grayscale
     checkerboard = cv2.imread(CHECKERBOARD_IMAGE, 0)
     # Read giraffe image
