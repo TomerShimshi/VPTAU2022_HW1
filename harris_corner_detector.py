@@ -123,7 +123,7 @@ def test_tiles_functions(to_save: bool = False) -> None:
 
 
 def create_grad_x_and_grad_y(
-        input_image: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+        input_image: np.ndarray) :#-> tuple[np.ndarray, np.ndarray]:
     """Calculate the gradients across the x and y-axes.
 
     Args:
@@ -161,12 +161,16 @@ def create_grad_x_and_grad_y(
     """
     if nof_color_channels == 3:
        input_image = cv2.cvtColor(input_image, cv2.COLOR_RGB2GRAY) 
-    added_x = np.zeros(input_image.shape[1]-1)
-    added_y = np.zeros(input_image.shape[0]-1)
-    offset_x = np.concatenate((added_x,input_image[:,:-1]),axis= 0,casting="same_kind")
+    added_x = np.zeros(input_image.shape[0])
+    added_y = np.zeros(input_image.shape[1])
+    #offset_x = np.concatenate((added_x,input_image[:,:-1]),axis= 0,casting="same_kind")
+    #offset_x = np.hstack((added_x,input_image[:,:-1]))
     #offset_y = np.column_stack((added_y,input_image[:-1,:]))
+    offset_y = np.vstack((added_y,input_image[:-1,:]))
+    #offset_x = np.row_stack((added_x,input_image[:,:-1]))
+    offset_x = np.column_stack((added_x,input_image[:,:-1]))
+    #offset_x = np.hstack((added_x,input_image[:-1,:]))
 
-    offset_x = np.vstack((added_x,input_image[:,:-1]))
     Ix = input_image - offset_x
     Iy = input_image - offset_y
     #Ix = np.random.uniform(size=(height, width))
