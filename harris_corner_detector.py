@@ -11,9 +11,9 @@ ID1 = '203200480'
 ID2 = '987654321'
 
 # Harris corner detector parameters - you may change them.
-K = 0.08
-CHECKERBOARD_THRESHOLD = 2.6e2
-GIRAFFE_THRESHOLD = 2.8e2
+K = 0.09
+CHECKERBOARD_THRESHOLD = 3e7
+GIRAFFE_THRESHOLD = 5e7
 BUTTERFLY_IMAGE = 'butterfly.jpg'
 
 # Do not change the following constants:
@@ -174,6 +174,8 @@ def create_grad_x_and_grad_y(
 
     Ix = input_image - offset_x
     Iy = input_image - offset_y
+    temp= Iy[1:,:]
+    temp2= Ix[:,1:]
     #Ix = np.random.uniform(size=(height, width))
     #Iy = np.random.uniform(size=(height, width))
     return Ix, Iy
@@ -248,9 +250,9 @@ def our_harris_corner_detector(input_image: np.ndarray, K: float,
     """INSERT YOUR CODE HERE.
     REPLACE THE output_image WITH THE BINARY MAP YOU COMPUTED."""
     #first convert to tiles
-    if len(input_image.shape) > 2:
-       input_image = cv2.cvtColor(input_image, cv2.COLOR_RGB2GRAY)  
-    tiles= black_and_white_image_to_tiles(input_image,25,25)
+    #if len(input_image.shape) > 2:
+      # response_image = cv2.cvtColor(response_image, cv2.COLOR_RGB2GRAY)  
+    tiles= black_and_white_image_to_tiles(response_image,25,25)
     new_tiles= np.zeros(tiles.shape)
     shoof = tiles.shape[0]
     for i in range(shoof):
@@ -258,12 +260,10 @@ def our_harris_corner_detector(input_image: np.ndarray, K: float,
         index = np.argmax(tile)
         new_tile_index= np.unravel_index(index,tile.shape,order= 'C')
         temp =tile[new_tile_index]
-        if i % 5 == 0:
-            temp1=0 #delete this
         new_tiles[i,new_tile_index[0],new_tile_index[1]]=tile[new_tile_index]
-    h,w = input_image.shape
+    h,w = response_image.shape
     new_image = image_tiles_to_black_and_white_image(new_tiles,h,w)
-    output_image = np.zeros(input_image.shape)
+    output_image = np.zeros(response_image.shape)
     output_image = np.where(new_image > threshold,1,0)
     return output_image
 
