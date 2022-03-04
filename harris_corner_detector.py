@@ -3,6 +3,7 @@ import numpy as np
 import cv2
 from scipy import signal
 from matplotlib import pyplot as plt
+from torch import square
 
 
 # Replace ID1 and ID2 with your IDs.
@@ -12,7 +13,7 @@ ID2 = '987654321'
 # Harris corner detector parameters - you may change them.
 K = 0.05
 CHECKERBOARD_THRESHOLD = 1e1
-GIRAFFE_THRESHOLD = 1e6
+GIRAFFE_THRESHOLD = 1e3
 BUTTERFLY_IMAGE = 'butterfly.jpg'
 
 # Do not change the following constants:
@@ -207,8 +208,13 @@ def calculate_response_image(input_image: np.ndarray, K: float) -> np.ndarray:
 
     """INSERT YOUR CODE HERE.
     REPLACE THE resonse_image WITH THE RESPONSE IMAGE YOU CALCULATED."""
-
-    response_image = np.random.uniform(size=Ix.shape)
+    kernel = np.ones((5,5))
+    Sxx = signal.convolve2d(np.square(Ix),kernel,mode= 'same')
+    Syy = signal.convolve2d(np.square(Iy),kernel,mode= 'same')
+    Sxy = signal.convolve2d(np.multiply(Ix,Iy),kernel,mode= 'same')
+    detM = np.multiply(Sxx,Syy)- np.square(Sxy)
+    TraceM = Sxx + Syy
+    response_image = detM - K* (np.square(TraceM))
     return response_image
 
 
@@ -241,7 +247,21 @@ def our_harris_corner_detector(input_image: np.ndarray, K: float,
     response_image = calculate_response_image(input_image, K)
     """INSERT YOUR CODE HERE.
     REPLACE THE output_image WITH THE BINARY MAP YOU COMPUTED."""
-    output_image = np.random.uniform(size=response_image.shape)
+    #first convert to tiles
+    if len(input_image.shape) > 2:
+       input_image = cv2.cvtColor(input_image, cv2.COLOR_RGB2GRAY)  
+    tiles= black_and_white_image_to_tiles(input_image,25,25)
+    new_tiles= np.zeros(tiles.shape)
+    for i in range(len(tiles[0])):
+        tile = tiles[i]
+        index = np.argmax(tile)
+        new_tile_index= np.unravel_index(index,tile.shape,order= 'C')
+        temp =tile[new_tile_index]
+        new_tiles[i,new_tile_index[0],new_tile_index[1]]=tile[new_tile_index]
+    h,w = input_image.shape
+    new_image = image_tiles_to_black_and_white_image(new_tiles,h,w)
+    output_image = np.zeros(input_image.shape)
+    output_image = np.where(new_image > threshold,1,0)
     return output_image
 
 
@@ -347,4 +367,4 @@ def main(to_save: bool = False) -> None:
 
 
 if __name__ == "__main__":
-    main(to_save=False)
+    main(to_save=True)
