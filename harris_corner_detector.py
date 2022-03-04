@@ -11,9 +11,9 @@ ID1 = '203200480'
 ID2 = '987654321'
 
 # Harris corner detector parameters - you may change them.
-K = 0.05
-CHECKERBOARD_THRESHOLD = 1e1
-GIRAFFE_THRESHOLD = 1e3
+K = 0.08
+CHECKERBOARD_THRESHOLD = 2.6e2
+GIRAFFE_THRESHOLD = 2.8e2
 BUTTERFLY_IMAGE = 'butterfly.jpg'
 
 # Do not change the following constants:
@@ -252,11 +252,14 @@ def our_harris_corner_detector(input_image: np.ndarray, K: float,
        input_image = cv2.cvtColor(input_image, cv2.COLOR_RGB2GRAY)  
     tiles= black_and_white_image_to_tiles(input_image,25,25)
     new_tiles= np.zeros(tiles.shape)
-    for i in range(len(tiles[0])):
+    shoof = tiles.shape[0]
+    for i in range(shoof):
         tile = tiles[i]
         index = np.argmax(tile)
         new_tile_index= np.unravel_index(index,tile.shape,order= 'C')
         temp =tile[new_tile_index]
+        if i % 5 == 0:
+            temp1=0 #delete this
         new_tiles[i,new_tile_index[0],new_tile_index[1]]=tile[new_tile_index]
     h,w = input_image.shape
     new_image = image_tiles_to_black_and_white_image(new_tiles,h,w)
