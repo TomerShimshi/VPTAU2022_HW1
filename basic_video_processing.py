@@ -4,7 +4,7 @@ import cv2
 
 
 # Replace ID1 and ID2 with your IDs.
-ID1 = '123456789'
+ID1 = '203200480'
 ID2 = '987654321'
 
 INPUT_VIDEO = 'atrium.avi'
@@ -51,7 +51,35 @@ def convert_video_to_grayscale(input_video_path: str,
     """INSERT YOUR CODE HERE.
     REMOVE THE pass KEYWORD AND IMPLEMENT YOUR OWN CODE.
     """
-    pass
+    cap = cv2.VideoCapture(input_video_path)
+    parameters = get_video_parameters(cap)
+    ret,frame = cap.read()
+    out = cv2.VideoWriter(output_video_path ,parameters['fourcc'],parameters['fps'],((frame.shape[1], frame.shape[0])), isColor=False)
+    # running the loop 
+    while cap.isOpened(): 
+  
+        # extracting the frames 
+        ret, img = cap.read() 
+
+        # converting to gray-scale 
+        
+
+        if ret:
+            
+            gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) 
+            # displaying the video 
+            cv2.imshow("Live", gray) 
+            # write to gray-scale 
+            out.write(gray)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+        else:
+            break
+    
+
+    cv2.destroyAllWindows() 
+    cap.release()
+
 
 
 def convert_video_to_black_and_white(input_video_path: str,
@@ -79,7 +107,37 @@ def convert_video_to_black_and_white(input_video_path: str,
     """INSERT YOUR CODE HERE.
         REMOVE THE pass KEYWORD AND IMPLEMENT YOUR OWN CODE.
         """
-    pass
+    cap = cv2.VideoCapture(input_video_path)
+    parameters = get_video_parameters(cap)
+    ret,frame = cap.read()
+    out = cv2.VideoWriter(output_video_path ,parameters['fourcc'],parameters['fps'],((frame.shape[1], frame.shape[0])), isColor=True)
+    # running the loop 
+    while cap.isOpened(): 
+  
+        # extracting the frames 
+        ret, img = cap.read() 
+
+        # converting to gray-scale 
+        
+
+        if ret:
+            
+            gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) 
+             ### Binarization ###
+            _, image_edit = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
+            RGB = cv2.cvtColor(image_edit, cv2.COLOR_GRAY2RGB) 
+            # displaying the video 
+            cv2.imshow("Live", RGB) 
+            # write to black-white 
+            out.write(RGB)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+        else:
+            break
+    
+
+    cv2.destroyAllWindows() 
+    cap.release()
 
 
 def convert_video_to_sobel(input_video_path: str,
@@ -111,7 +169,7 @@ def convert_video_to_sobel(input_video_path: str,
 
 
 def main():
-    convert_video_to_grayscale(INPUT_VIDEO, GRAYSCALE_VIDEO)
+    #convert_video_to_grayscale(INPUT_VIDEO, GRAYSCALE_VIDEO)
     convert_video_to_black_and_white(INPUT_VIDEO, BLACK_AND_WHITE_VIDEO)
     convert_video_to_sobel(INPUT_VIDEO, SOBEL_VIDEO)
 
