@@ -1,5 +1,6 @@
 """Basic Video Processing methods."""
 import os
+from pickle import FALSE
 import cv2
 
 
@@ -110,7 +111,7 @@ def convert_video_to_black_and_white(input_video_path: str,
     cap = cv2.VideoCapture(input_video_path)
     parameters = get_video_parameters(cap)
     ret,frame = cap.read()
-    out = cv2.VideoWriter(output_video_path ,parameters['fourcc'],parameters['fps'],((frame.shape[1], frame.shape[0])), isColor=True)
+    out = cv2.VideoWriter(output_video_path ,parameters['fourcc'],parameters['fps'],((frame.shape[1], frame.shape[0])), isColor=False)
     # running the loop 
     while cap.isOpened(): 
   
@@ -165,12 +166,54 @@ def convert_video_to_sobel(input_video_path: str,
     """INSERT YOUR CODE HERE.
         REMOVE THE pass KEYWORD AND IMPLEMENT YOUR OWN CODE.
         """
-    pass
+    cap = cv2.VideoCapture(input_video_path)
+    parameters = get_video_parameters(cap)
+    ret,frame = cap.read()
+    out = cv2.VideoWriter(output_video_path ,parameters['fourcc'],parameters['fps'],((frame.shape[1], frame.shape[0])), isColor=False)
+    scale = 1
+    delta = 0
+    ddepth = cv2.CV_16S
+    # running the loop 
+    while cap.isOpened(): 
+  
+        # extracting the frames 
+        ret, img = cap.read() 
+
+        # converting to gray-scale 
+        
+
+        if ret:
+            
+            gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) 
+            grad_x = cv2.Sobel(gray, ddepth, 1, 0, ksize=3, scale=scale, delta=delta, borderType=cv2.BORDER_DEFAULT)
+            # Gradient-Y
+            # grad_y = cv.Scharr(gray,ddepth,0,1)
+            grad_y = cv2.Sobel(gray, ddepth, 0, 1, ksize=3, scale=scale, delta=delta, borderType=cv2.BORDER_DEFAULT)
+
+
+            abs_grad_x = cv2.convertScaleAbs(grad_x)
+            abs_grad_y = cv2.convertScaleAbs(grad_y)
+
+
+            grad = cv2.addWeighted(abs_grad_x, 0.5, abs_grad_y, 0.5, 0.5)
+            #RGB = cv2.cvtColor(grad, cv2.COLOR_GRAY2RGB)
+            # displaying the video 
+            cv2.imshow("Live", grad) 
+            # write to gray-scale 
+            out.write(grad)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+        else:
+            break
+    
+
+    cv2.destroyAllWindows() 
+    cap.release()
 
 
 def main():
     #convert_video_to_grayscale(INPUT_VIDEO, GRAYSCALE_VIDEO)
-    convert_video_to_black_and_white(INPUT_VIDEO, BLACK_AND_WHITE_VIDEO)
+    #convert_video_to_black_and_white(INPUT_VIDEO, BLACK_AND_WHITE_VIDEO)
     convert_video_to_sobel(INPUT_VIDEO, SOBEL_VIDEO)
 
 
