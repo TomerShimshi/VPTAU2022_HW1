@@ -174,8 +174,8 @@ def create_grad_x_and_grad_y(
 
     Ix = input_image - offset_x
     Iy = input_image - offset_y
-    temp= Iy[1:,:]
-    temp2= Ix[:,1:]
+    Iy= np.vstack((added_y,Iy[1:,:]))#Iy[1:,:]
+    Ix=  np.column_stack((added_x,Ix[:,1:]))#Ix[:,1:]
     #Ix = np.random.uniform(size=(height, width))
     #Iy = np.random.uniform(size=(height, width))
     return Ix, Iy
