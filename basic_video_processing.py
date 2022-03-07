@@ -6,7 +6,7 @@ import cv2
 
 # Replace ID1 and ID2 with your IDs.
 ID1 = '203200480'
-ID2 = '987654321'
+ID2 = '320521461'
 
 INPUT_VIDEO = 'atrium.avi'
 GRAYSCALE_VIDEO = f'{ID1}_{ID2}_atrium_grayscale.avi'
@@ -212,8 +212,8 @@ def convert_video_to_sobel(input_video_path: str,
 
 
 def main():
-    #convert_video_to_grayscale(INPUT_VIDEO, GRAYSCALE_VIDEO)
-    #convert_video_to_black_and_white(INPUT_VIDEO, BLACK_AND_WHITE_VIDEO)
+    convert_video_to_grayscale(INPUT_VIDEO, GRAYSCALE_VIDEO)
+    convert_video_to_black_and_white(INPUT_VIDEO, BLACK_AND_WHITE_VIDEO)
     convert_video_to_sobel(INPUT_VIDEO, SOBEL_VIDEO)
 
 
