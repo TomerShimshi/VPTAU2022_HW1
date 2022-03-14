@@ -1,4 +1,5 @@
 """Harris Corner Detector."""
+from cv2 import sqrt
 import numpy as np
 import cv2
 from scipy import signal
@@ -265,6 +266,26 @@ def our_harris_corner_detector(input_image: np.ndarray, K: float,
     new_image = image_tiles_to_black_and_white_image(new_tiles,h,w)
     output_image = np.zeros(response_image.shape)
     output_image = np.where(new_image > threshold,1,0)
+    idx = np.nonzero(output_image)
+    idx=list( zip(idx[0],idx[1]))
+    i=0
+    count1 = len(idx) 
+    while (i<len(idx)-1):
+        delta = np.sqrt(np.abs(idx[i][0]- idx[i+1][0])^2+ np.abs(idx[i][1]- idx[i+1][1])^2)
+        if delta <=10.1:
+            temp =idx[i] 
+            output_image[idx[i][0],idx[i][1]] = 0
+            i+=2
+        else:
+            i+=1
+    
+    idx = np.nonzero(output_image)
+    idx=list( zip(idx[0],idx[1]))
+    i=0
+    count2 = len(idx)
+
+
+
     return output_image
 
 
