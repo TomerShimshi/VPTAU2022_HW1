@@ -12,9 +12,9 @@ ID1 = '203200480'
 ID2 = '320521461'
 
 # Harris corner detector parameters - you may change them.
-K = 0.09
+K = 0.025
 CHECKERBOARD_THRESHOLD = 3e7
-GIRAFFE_THRESHOLD = 5e7
+GIRAFFE_THRESHOLD = 5.5e7
 BUTTERFLY_IMAGE = 'butterfly.jpg'
 
 # Do not change the following constants:
@@ -272,16 +272,18 @@ def our_harris_corner_detector(input_image: np.ndarray, K: float,
     count1 = len(idx) 
     while (i<len(idx)-1):
         delta = np.sqrt(np.abs(idx[i][0]- idx[i+1][0])^2+ np.abs(idx[i][1]- idx[i+1][1])^2)
-        if delta <=10.1:
+        if delta <=11:
             temp =idx[i] 
-            output_image[idx[i][0],idx[i][1]] = 0
+            if response_image[idx[i][0],idx[i][1]]<=response_image[idx[i+1][0],idx[i+1][1]]: 
+                output_image[idx[i][0],idx[i][1]] = 0
+            else:
+               output_image[idx[i+1][0],idx[i+1][1]] = 0 
             i+=2
         else:
             i+=1
     
     idx = np.nonzero(output_image)
     idx=list( zip(idx[0],idx[1]))
-    i=0
     count2 = len(idx)
 
 
