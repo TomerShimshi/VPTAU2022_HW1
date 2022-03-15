@@ -270,7 +270,7 @@ def our_harris_corner_detector(input_image: np.ndarray, K: float,
     idx1=list( zip(idx1[0],idx1[1]))
     i=0
     count1 = len(idx1) 
-    print('idx1 = {}'.format(idx1))
+    #print('idx1 = {}'.format(idx1))
     
         
     while (i<len(idx1)):
@@ -292,12 +292,12 @@ def our_harris_corner_detector(input_image: np.ndarray, K: float,
             else:
                 j+=1
         i+=1
-       
+    '''  
     idx = np.nonzero(output_image)
     idx=list( zip(idx[0],idx[1]))
     count2 = len(idx)
     print('idx2 = {}'.format(idx))
-
+    '''
 
 
     return output_image
@@ -378,7 +378,7 @@ def create_corner_plots(black_and_white_image: np.ndarray,
 
 
 def main(to_save: bool = False) -> None:
-    #test_tiles_functions(to_save)
+    test_tiles_functions(to_save)
     # Read checkerboard image as grayscale
     checkerboard = cv2.imread(CHECKERBOARD_IMAGE, 0)
     # Read giraffe image
