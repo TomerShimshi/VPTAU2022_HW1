@@ -210,8 +210,8 @@ def convert_video_to_sobel(input_video_path: str,
 
 
 def main():
-    #convert_video_to_grayscale(INPUT_VIDEO, GRAYSCALE_VIDEO)
-    #convert_video_to_black_and_white(INPUT_VIDEO, BLACK_AND_WHITE_VIDEO)
+    convert_video_to_grayscale(INPUT_VIDEO, GRAYSCALE_VIDEO)
+    convert_video_to_black_and_white(INPUT_VIDEO, BLACK_AND_WHITE_VIDEO)
     convert_video_to_sobel(INPUT_VIDEO, SOBEL_VIDEO)
 
 
