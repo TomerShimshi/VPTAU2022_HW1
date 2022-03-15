@@ -194,11 +194,11 @@ def convert_video_to_sobel(input_video_path: str,
 
 
             grad =cv2.addWeighted(abs_grad_x, 0.5, abs_grad_y, 0.5, 0.5)
-            #RGB = cv2.cvtColor(grad, cv2.COLOR_GRAY2RGB)
+            RGB = cv2.cvtColor(grad, cv2.COLOR_GRAY2RGB)
             # displaying the video 
-            cv2.imshow("Live", grad) 
+            cv2.imshow("Live", RGB) 
             # write to gray-scale 
-            out.write(grad)
+            out.write(RGB)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
         else:
