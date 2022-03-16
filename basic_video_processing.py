@@ -111,7 +111,7 @@ def convert_video_to_black_and_white(input_video_path: str,
     cap = cv2.VideoCapture(input_video_path)
     parameters = get_video_parameters(cap)
     ret,frame = cap.read()
-    out = cv2.VideoWriter(output_video_path ,parameters['fourcc'],parameters['fps'],((frame.shape[1], frame.shape[0])), isColor=False)
+    out = cv2.VideoWriter(output_video_path ,parameters['fourcc'],parameters['fps'],((frame.shape[1], frame.shape[0])), isColor=True)
     # running the loop 
     while cap.isOpened(): 
   
@@ -169,7 +169,7 @@ def convert_video_to_sobel(input_video_path: str,
     cap = cv2.VideoCapture(input_video_path)
     parameters = get_video_parameters(cap)
     ret,frame = cap.read()
-    out = cv2.VideoWriter(output_video_path ,parameters['fourcc'],parameters['fps'],((frame.shape[1], frame.shape[0])), isColor=False)
+    out = cv2.VideoWriter(output_video_path ,parameters['fourcc'],parameters['fps'],((frame.shape[1], frame.shape[0])), isColor=True)
     scale = 1
     delta = 0
     ddepth = -1
